@@ -74,7 +74,7 @@ class _PriceColumnState extends State<PriceColumn> {
                         children: [
                           Container(
                             width: widget.width - PRICE_BAR_WIDTH,
-                            height: 0.05,
+                            height: 1,
                             color: widget.style.borderColor,
                           ),
                           Expanded(
@@ -83,7 +83,7 @@ class _PriceColumnState extends State<PriceColumn> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: widget.style.primaryTextColor,
-                                fontSize: 11,
+                                fontSize: 8,
                               ),
                             ),
                           ),

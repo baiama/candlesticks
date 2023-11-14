@@ -119,7 +119,8 @@ class _TimeRowState extends State<TimeRow> {
                 children: [
                   Expanded(
                     child: Container(
-                      width: 0.05,
+                      width: 1,
+                      margin: EdgeInsets.only(bottom: DATE_BAR_HEIGHT),
                       color: widget.style.borderColor,
                     ),
                   ),
@@ -142,7 +143,7 @@ class _TimeRowState extends State<TimeRow> {
                         dateFormatter(widget.indicatorTime!),
                         style: TextStyle(
                           color: widget.style.secondaryTextColor,
-                          fontSize: 12,
+                          fontSize: 8,
                         ),
                       ),
                     ),

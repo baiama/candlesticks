@@ -194,71 +194,74 @@ class _MyAppState extends State<MyApp> {
                         .removeWhere((element) => element.name == indicator);
                   });
                 },
-                actions: [
-                  ToolBarAction(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Center(
-                            child: Container(
-                              width: 200,
-                              color: Theme.of(context).backgroundColor,
-                              child: Wrap(
-                                children: intervals
-                                    .map((e) => Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SizedBox(
-                                            width: 50,
-                                            height: 30,
-                                            child: RawMaterialButton(
-                                              elevation: 0,
-                                              fillColor:
-                                                  const Color(0xFF494537),
-                                              onPressed: () {
-                                                fetchCandles(currentSymbol, e);
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                e,
-                                                style: const TextStyle(
-                                                  color: Color(0xFFF0B90A),
+                toolBarActions: Row(
+                  children: [
+                    ToolBarAction(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Center(
+                              child: Container(
+                                width: 200,
+                                color: Theme.of(context).backgroundColor,
+                                child: Wrap(
+                                  children: intervals
+                                      .map((e) => Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SizedBox(
+                                              width: 50,
+                                              height: 30,
+                                              child: RawMaterialButton(
+                                                elevation: 0,
+                                                fillColor:
+                                                    const Color(0xFF494537),
+                                                onPressed: () {
+                                                  fetchCandles(
+                                                      currentSymbol, e);
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(
+                                                  e,
+                                                  style: const TextStyle(
+                                                    color: Color(0xFFF0B90A),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ))
-                                    .toList(),
+                                          ))
+                                      .toList(),
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      currentInterval,
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        currentInterval,
+                      ),
                     ),
-                  ),
-                  ToolBarAction(
-                    width: 100,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return SymbolsSearchModal(
-                            symbols: symbols,
-                            onSelect: (value) {
-                              fetchCandles(value, currentInterval);
-                            },
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      currentSymbol,
-                    ),
-                  )
-                ],
+                    ToolBarAction(
+                      width: 100,
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SymbolsSearchModal(
+                              symbols: symbols,
+                              onSelect: (value) {
+                                fetchCandles(value, currentInterval);
+                              },
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        currentSymbol,
+                      ),
+                    )
+                  ],
+                ),
               );
             },
           ),

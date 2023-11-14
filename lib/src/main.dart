@@ -3,7 +3,7 @@ import 'package:candlesticks/candlesticks.dart';
 import 'package:candlesticks/src/models/main_window_indicator.dart';
 import 'package:candlesticks/src/widgets/mobile_chart.dart';
 import 'package:candlesticks/src/widgets/desktop_chart.dart';
-import 'package:candlesticks/src/widgets/toolbar.dart';
+import 'package:candlesticks/src/widgets/zoom_actions_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
@@ -27,7 +27,7 @@ class Candlesticks extends StatefulWidget {
   final Future<void> Function()? onLoadMoreCandles;
 
   /// List of buttons you what to add on top tool bar
-  final List<ToolBarAction> actions;
+  final Widget? toolBarActions;
 
   /// List of indicators to draw
   final List<Indicator>? indicators;
@@ -50,7 +50,7 @@ class Candlesticks extends StatefulWidget {
     Key? key,
     required this.candles,
     this.onLoadMoreCandles,
-    this.actions = const [],
+    this.toolBarActions,
     this.chartAdjust = ChartAdjust.visibleRange,
     this.displayZoomActions = true,
     this.loadingWidget,
@@ -71,6 +71,7 @@ class _CandlesticksState extends State<Candlesticks> {
   int index = -10;
   double lastX = 0;
   int lastIndex = -10;
+  double candleMaxWidth = 15;
 
   /// candleWidth controls the width of the single candles.
   ///  range: [2...10]
@@ -136,41 +137,24 @@ class _CandlesticksState extends State<Candlesticks> {
             ? CandleSticksStyle.dark()
             : CandleSticksStyle.light());
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (widget.displayZoomActions == true || widget.actions.isNotEmpty) ...[
-          ToolBar(
-            color: style.toolBarColor,
-            children: [
-              if (widget.displayZoomActions) ...[
-                ToolBarAction(
-                  onPressed: () {
-                    setState(() {
-                      candleWidth -= 2;
-                      candleWidth = max(candleWidth, 2);
-                    });
-                  },
-                  child: Icon(
-                    Icons.remove,
-                    color: style.borderColor,
-                  ),
-                ),
-                ToolBarAction(
-                  onPressed: () {
-                    setState(() {
-                      candleWidth += 2;
-                      candleWidth = min(candleWidth, 20);
-                    });
-                  },
-                  child: Icon(
-                    Icons.add,
-                    color: style.borderColor,
-                  ),
-                ),
-              ],
-              ...widget.actions
-            ],
+        if (widget.toolBarActions != null) widget.toolBarActions!,
+        if (widget.displayZoomActions)
+          ZoomActionsWidget(
+            onZomIn: () {
+              setState(() {
+                candleWidth -= 2;
+                candleWidth = max(candleWidth, 2);
+              });
+            },
+            onZomOut: () {
+              setState(() {
+                candleWidth += 2;
+                candleWidth = min(candleWidth, candleMaxWidth);
+              });
+            },
           ),
-        ],
         if (widget.candles.length == 0 || mainWindowDataContainer == null)
           Expanded(
             child: Center(
@@ -198,7 +182,7 @@ class _CandlesticksState extends State<Candlesticks> {
                       scale = min(1.1, scale);
                       setState(() {
                         candleWidth *= scale;
-                        candleWidth = min(candleWidth, 20);
+                        candleWidth = min(candleWidth, candleMaxWidth);
                         candleWidth = max(candleWidth, 2);
                       });
                     },
@@ -241,7 +225,7 @@ class _CandlesticksState extends State<Candlesticks> {
                       scale = min(1.1, scale);
                       setState(() {
                         candleWidth *= scale;
-                        candleWidth = min(candleWidth, 20);
+                        candleWidth = min(candleWidth, candleMaxWidth);
                         candleWidth = max(candleWidth, 2);
                       });
                     },
